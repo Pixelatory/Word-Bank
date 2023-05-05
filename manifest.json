@@ -1,0 +1,16 @@
+{
+    "name": "Word Bank",
+    "version": "0.0.0.1",
+    "manifest_version": 3,
+    "description": "Put in words, and take a scheduled quiz to learn them.",
+	"action": {
+        "default_popup": "popup/popup.html"
+    },
+    "permissions": [
+        "contextMenus",
+        "storage"
+    ],
+    "background": {
+        "service_worker": "./js/background.js"
+    }
+}

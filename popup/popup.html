@@ -1,0 +1,44 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Word Bank</title>
+        <link rel="stylesheet" href="../css/main.css">
+    </head>
+    <body>
+        <section id="settings_screen" style="display:none;">
+            <button class="back_button">Back</button>
+            <h1>Settings</h1>
+        </section>
+
+        <section id="vocabulary_screen" style="display:none;">
+            <button class="back_button">Back</button>
+            <h1>Vocabulary</h1>
+        </section>
+
+        <section id="add_word_screen" style="display:none;">
+            <button class="back_button">Back</button>
+            <h1>Add Word</h1>
+            <form id="add_word_form">
+                <input type="text" autocomplete="off" name="word"></input>
+                <input type="submit" value="Search"></input>
+            </form>
+        </section>
+
+        <section id="main_screen">
+            <h1>WORD BANKIES!</h1>
+            <p>Total words added: NUM</p>
+            <button id="settings_button">
+                <span>Settings</span>
+            </button>
+            <button id="vocabulary_button">
+                <span>Vocabulary</span>
+            </button>
+            <button id="add_word_button">
+                <span>Add Word</span>
+            </button>
+        </section>
+
+        <script type="text/javascript" src="../js/main.js"></script>
+        <script type="text/javascript" src="../js/vocabulary.js"></script>
+    </body>
+</html>

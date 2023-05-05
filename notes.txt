@@ -1,0 +1,14 @@
+Word storage information:
+    - date added
+    - word
+    - definition
+
+Guesses storage information:
+    - date of guess
+    - word definition guessed
+    - was guess correct
+
+NLP word2vec usage:
+    - finding similar words (word2vec)
+
+Use https://dictionaryapi.dev/ for getting definitions of a word.
