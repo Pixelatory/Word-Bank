@@ -1,7 +1,8 @@
-import { clearFormInputs } from 'utils.js';
+import { clearFormInputs } from './utils.js';
 
 // Registering all important web elements as js variables
 let addWordForm = document.getElementById("add_word_form");
+let wordTextField = document.getElementById("word_txt_field");
 
 let screens = [
     document.getElementById("settings_screen"),
@@ -33,23 +34,38 @@ function get_vocabulary() {
 }
 
 function cleanup_add_word_screen() {
+    let submitButton = addWordForm.querySelector('input[type="submit"]');
     while(addWordForm.querySelector('input[type="radio"]') != null) {
         let radioButton = addWordForm.querySelector('input[type="radio"]');
         radioButton.remove();
     }
+
     while(addWordForm.querySelector('label') != null) {
         let label = addWordForm.querySelector('label');
         label.remove();
     }
-    addWordForm.querySelector('input[name="word"]').value = null;
+
+    let newDefinitionInput = document.getElementById("new_definition_txt_input");
+    if(newDefinitionInput) {
+        newDefinitionInput.remove();
+    }
+
+    let addWordInfoText = document.getElementById("add_word_info_txt");
+    if(addWordInfoText) {
+        addWordInfoText.remove();
+    }
+
+    submitButton.setAttribute("value", "Search");
 }
 
-function new_add_word_definition(definition, id_count) {
+function show_add_word_definition(definition, id_count) {
     let submitButton = addWordForm.querySelector('input[type="submit"]');
     let newRadio = document.createElement("input");
     let newLabel = document.createElement("label");
+    //newLabel.prepend(newRadio);
     let radioId = "def" + id_count.toString();
-    setAttributes(newRadio, {"type": "radio", "name": "definition", "id": radioId, "class": "block"});
+    setAttributes(newRadio, {"type": "radio", "name": "definition", "id": radioId});
+    newRadio.style.display = "none";
     setAttributes(newLabel, {"for": radioId, "class": "block"});
     newLabel.innerText = definition;
     addWordForm.insertBefore(newRadio, submitButton);
@@ -66,6 +82,8 @@ function displayScreen(screen_id) {
     if (screen_id === "vocabulary_screen") {
         get_vocabulary();
     }
+
+    cleanup_add_word_screen();
 
     // set only 1 screen as visible
     screens.forEach(element => {
@@ -126,7 +144,26 @@ addWordForm.addEventListener("submit", (e) => {
     let submitButton = addWordForm.querySelector('input[type="submit"]');
 
     if (submitButton.getAttribute("value") === "Search") {
-        let definitions = gatherDefinitions(submittedWord);
+        let id_count = 0;
+        gatherDefinitions(submittedWord).then((definitions) => {
+            // Handling of definitions
+            console.log(definitions.length);
+            definitions.forEach((def) => {
+                show_add_word_definition(def, id_count++);
+            });
+
+            // No definitions (could not be a word, or no definitions from API)
+            if(definitions.length == 0) {
+                let infoText = document.createElement("p");
+                infoText.innerText = "No definitions found for this word";
+                setAttributes(infoText, {"id": "add_word_info_txt"})
+                addWordForm.insertBefore(infoText, submitButton);
+            }
+
+            let newDefinitionInput = document.createElement("input");
+            setAttributes(newDefinitionInput, {"type": "text", "placeholder": "Make new definition", "name": "new_definition", "id": "new_definition_txt_input"});
+            addWordForm.insertBefore(newDefinitionInput, submitButton);
+        });
         submitButton.setAttribute("value", "Add Word");
     } else {
         chrome.storage.local.get("words").then((result) => {
@@ -138,3 +175,8 @@ addWordForm.addEventListener("submit", (e) => {
         cleanup_add_word_screen();
     }
 }, true);
+
+wordTextField.addEventListener("input", () => {
+    console.log("tttt");
+    cleanup_add_word_screen();
+});

@@ -5,6 +5,8 @@ export function clearFormInputs(container) {
       case "checkbox":
         el.checked = false;
         break;
+      case "submit":
+        break;
       default:
         el.value = "";
     }
